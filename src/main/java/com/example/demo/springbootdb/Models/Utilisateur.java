@@ -48,6 +48,10 @@ public class Utilisateur {
     @Size(min = 6, message = "Le mot de passe doit contenir au moins 6 caractères")
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private Role role;
+
     // Constructeurs
     public Utilisateur() {
         this.dateCreation = LocalDateTime.now();

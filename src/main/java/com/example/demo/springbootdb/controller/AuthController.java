@@ -1,3 +1,4 @@
+// ✅ AuthController.java
 package com.example.demo.springbootdb.controller;
 
 import com.example.demo.springbootdb.Models.Utilisateur;
@@ -8,7 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -42,8 +44,14 @@ public class AuthController {
             );
 
             if (auth.isAuthenticated()) {
-                String token = jwtService.generateToken(email);
-                return ResponseEntity.ok(Map.of("token", token));
+                Utilisateur utilisateur = authService.findByEmail(email);
+                UserDetails userDetails = User.withUsername(utilisateur.getEmail())
+                        .password(utilisateur.getPassword())
+                        .roles(utilisateur.getRole().name())
+                        .build();
+
+                String token = jwtService.generateToken(userDetails, utilisateur.getRole());
+                return ResponseEntity.ok(Map.of("token", token, "role", utilisateur.getRole()));
             }
         } catch (Exception e) {
             return ResponseEntity.status(401).body("Identifiants incorrects ❌");
