@@ -1,4 +1,4 @@
-// ✅ AuthController.java
+
 package com.example.demo.springbootdb.controller;
 
 import com.example.demo.springbootdb.Models.Utilisateur;
@@ -54,7 +54,7 @@ public class AuthController {
                 return ResponseEntity.ok(Map.of("token", token, "role", utilisateur.getRole()));
             }
         } catch (Exception e) {
-            return ResponseEntity.status(401).body("Identifiants incorrects ❌");
+            return ResponseEntity.status(401).body("Identifiants incorrects ");
         }
 
         return ResponseEntity.status(401).body("Erreur d'authentification");

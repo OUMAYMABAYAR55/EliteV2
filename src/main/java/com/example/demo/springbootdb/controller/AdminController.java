@@ -10,7 +10,7 @@ public class AdminController {
 
         @GetMapping("/dashboard")
         public String dashboard() {
-            return "Bienvenue ADMIN 👑";
+            return "Bienvenue ADMIN";
         }
 
 }

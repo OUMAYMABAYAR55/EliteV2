@@ -31,7 +31,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/parent/**").hasAnyRole("PARENT", "ADMIN") // 👨‍👩‍👧‍👦 Parent
                         .requestMatchers("/api/utilisateurs/**").hasAnyRole("ADMIN", "PARENT", "MEMBRE")
-                        .anyRequest().authenticated() // 🔒 Auth pour tout le reste
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
@@ -39,11 +39,11 @@ public class SecurityConfig {
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // 🔐 Pour encoder les mots de passe
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager(); // ⚙️ Gestion d'authentification
+        return config.getAuthenticationManager();
     }
 }

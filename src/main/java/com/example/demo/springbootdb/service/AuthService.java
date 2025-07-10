@@ -25,9 +25,8 @@ public class AuthService {
         // Encoder le mot de passe
         utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
 
-        // Définir un rôle par défaut si non fourni
         if (utilisateur.getRole() == null) {
-            utilisateur.setRole(Role.MEMBRE); // Rôle par défaut
+            utilisateur.setRole(Role.MEMBRE);
         }
 
         utilisateurRepository.save(utilisateur);
@@ -41,7 +40,6 @@ public class AuthService {
         ).orElse(false);
     }
 
-    // ✅ Méthode manquante à ajouter ici
     public Utilisateur findByEmail(String email) {
         return utilisateurRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
