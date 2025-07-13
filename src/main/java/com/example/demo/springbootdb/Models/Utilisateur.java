@@ -1,16 +1,19 @@
 package com.example.demo.springbootdb.Models;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.List; // ✅ Import manquant pour List
+
 @Getter
 @Setter
 @Entity
 @Table(name = "utilisateur")
-
 public class Utilisateur {
 
     @Id
@@ -51,6 +54,10 @@ public class Utilisateur {
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
+
+    // 👇 Relation avec enfants
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+    private List<Enfant> enfants;
 
     // Constructeurs
     public Utilisateur() {
