@@ -8,9 +8,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 public class AdminController {
 
-        @GetMapping("/dashboard")
-        public String dashboard() {
+        @GetMapping("/dashboard1")
+        public String dashboard1() {
             return "Bienvenue ADMIN";
         }
+        @GetMapping("/dashboard2")
+    public String dashboard2() {
+        return "Bienvenue ADMIN";
+    }
 
 }

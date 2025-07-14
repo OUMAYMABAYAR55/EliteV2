@@ -30,6 +30,12 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
+        // 🔒 NE PAS filtrer les requêtes d'authentification
+        if (request.getServletPath().startsWith("/api/auth")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
@@ -44,7 +50,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 }
             } catch (io.jsonwebtoken.ExpiredJwtException e) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write(" Token expiré.");
+                response.getWriter().write("Token expiré.");
                 return;
             } catch (io.jsonwebtoken.JwtException e) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
