@@ -1,26 +1,23 @@
 package com.example.demo.springbootdb.Models;
 
 import jakarta.persistence.*;
-import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
+import java.util.Date;
 
 @Getter
 @Setter
 @Entity
-public class Participation {
+public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idP;
+    private Long id;
 
-    private Date dateinscription;
+    private String contenu;
 
-    private String statuts;
-
-    @ManyToOne
-    private Event event;
+    private Date dateEnvoi;
 
     @ManyToOne
-    private Enfant enfant;
+    private Utilisateur utilisateur; // le parent
 }

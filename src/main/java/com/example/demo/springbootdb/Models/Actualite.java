@@ -10,11 +10,17 @@ import java.util.Date;
 @Setter
 @Entity
 public class Actualite {
+
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long idA;
+
         private String titre;
-        private String contenue;
+
+        private String contenu; // 🔁 Corrigé
+
         private Date datePub;
 
+        @OneToOne
+        private Event event;
 }
