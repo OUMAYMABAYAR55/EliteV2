@@ -27,11 +27,14 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // 🔓 Auth public
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/parent/**").hasAnyRole("PARENT", "ADMIN") // 👨‍👩‍👧‍👦 Parent
-                        .requestMatchers("/api/utilisateurs/**").hasAnyRole("ADMIN", "PARENT", "MEMBRE")
-                        .anyRequest().authenticated() // 🔒 Auth pour tout le reste
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/api/parent/**").hasAnyAuthority("ROLE_PARENT", "ROLE_ADMIN")
+                        .requestMatchers("/api/utilisateurs/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_PARENT", "ROLE_MEMBRE")
+                        .requestMatchers("/api/certificat/assign/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_GERANT", "ROLE_SECRETAIRE")
+                        .requestMatchers("/api/events/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_GERANT", "ROLE_SECRETAIRE")  // <-- Ajout ici
+                        .requestMatchers("/participations/**").hasAnyAuthority("ROLE_PARENT", "ROLE_ADMIN")
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
@@ -39,11 +42,11 @@ public class SecurityConfig {
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // 🔐 Pour encoder les mots de passe
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager(); // ⚙️ Gestion d'authentification
+        return config.getAuthenticationManager();
     }
 }

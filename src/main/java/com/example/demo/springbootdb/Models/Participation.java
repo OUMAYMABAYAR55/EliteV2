@@ -1,20 +1,26 @@
 package com.example.demo.springbootdb.Models;
 
 import jakarta.persistence.*;
-import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
+@Table(name = "participation")
 public class Participation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idP;
+    private Long id;
 
-    private Date dateinscription;
-    private String statuts;
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    private Utilisateur parent;
 
+    @ManyToOne
+    @JoinColumn(name = "event_id")
+    private Event event;
+
+    // Champs supplémentaires si besoin (date, statut…)
 }

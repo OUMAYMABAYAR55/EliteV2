@@ -1,22 +1,19 @@
 package com.example.demo.springbootdb.controller;
+
 import com.example.demo.springbootdb.Models.Participation;
 import com.example.demo.springbootdb.service.ParticipationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
-
 
 @RestController
-@RequestMapping("/api/participations")
+@RequestMapping("/participations")
 public class ParticipationController {
+
     @Autowired
-    ParticipationService participationService;
-    @GetMapping
-    public List<Participation> getAllParticipations() {
-        return participationService.findAll();
-    }
+    private ParticipationService participationService;
+
     @PostMapping
-    public Participation saveParticipation(@RequestBody Participation participation) {
-        return participationService.save(participation);
+    public Participation participer(@RequestBody Participation participation) {
+        return participationService.enregistrerParticipation(participation);
     }
 }

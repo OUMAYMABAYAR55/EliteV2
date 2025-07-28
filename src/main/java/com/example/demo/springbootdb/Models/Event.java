@@ -4,18 +4,24 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
-
 @Getter
 @Setter
 @Entity
-
+@Table(name = "event")
 public class Event {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idE;
-    private String type;
+    private Long id;
+
     private String titre;
-    private Date date;
-    private int nbPlaces;
+
+    @Column(nullable = false)
+    private String type; // "FORMATION" ou "PROJET"
+
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    private Utilisateur parent;
+
+    // Autres champs optionnels (date, description...)
 }

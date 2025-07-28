@@ -26,10 +26,13 @@ public class JwtService {
     }
 
     public String extractRole(String token) {
-        return Jwts.parserBuilder().setSigningKey(key).build()
+        String rawRole = Jwts.parserBuilder().setSigningKey(key).build()
                 .parseClaimsJws(token)
                 .getBody()
                 .get("role", String.class);
+
+        // ✅ Supprime le préfixe "ROLE_" si présent
+        return rawRole.replace("ROLE_", "");
     }
 
     public String extractEmail(String token) {
