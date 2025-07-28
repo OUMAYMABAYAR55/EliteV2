@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -17,9 +17,11 @@ public class Actualite {
 
         private String titre;
 
-        private String contenu; // 🔁 Corrigé
+        private String contenu;
 
-        private Date datePub;
+        private String auteur;  // Added missing field
+
+        private LocalDateTime datePublication;  // Changed from datePub to datePublication and Date to LocalDateTime
 
         @OneToOne
         private Event event;

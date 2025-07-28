@@ -4,6 +4,7 @@ import com.example.demo.springbootdb.Models.*;
 import com.example.demo.springbootdb.repository.*;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
@@ -39,7 +40,7 @@ public class EventService {
                 .orElseThrow(() -> new RuntimeException("Enfant non trouvé"));
 
         boolean existe = participationRepo.existsByEnfantAndEvent(enfant, event);
-        if (existe) return "L’enfant est déjà inscrit.";
+        if (existe) return "L'enfant est déjà inscrit.";
 
         Participation p = new Participation();
         p.setDateinscription(new Date());
@@ -61,7 +62,7 @@ public class EventService {
         Actualite actualite = new Actualite();
         actualite.setTitre(titre);
         actualite.setContenu(contenu);
-        actualite.setDatePub(new Date());
+        actualite.setDatePublication(LocalDateTime.now()); // Changed from setDatePub(new Date())
         actualite.setEvent(event);
         actualiteRepo.save(actualite);
 
@@ -82,5 +83,4 @@ public class EventService {
 
         return "Actualité publiée avec notifications.";
     }
-
 }
