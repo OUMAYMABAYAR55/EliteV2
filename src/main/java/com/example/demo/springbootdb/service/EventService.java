@@ -14,18 +14,18 @@ public class EventService {
 
     private final EventRepository eventRepo;
     private final ParticipationRepository participationRepo;
-    private final ActualiteRepository actualiteRepo;
+    //private final ActualiteRepository actualiteRepo;
     private final NotificationRepository notificationRepo;
     private final EnfantRepository enfantRepo;
 
     public EventService(EventRepository eventRepo,
                         ParticipationRepository participationRepo,
-                        ActualiteRepository actualiteRepo,
+                       // ActualiteRepository actualiteRepo,
                         NotificationRepository notificationRepo,
                         EnfantRepository enfantRepo) {
         this.eventRepo = eventRepo;
         this.participationRepo = participationRepo;
-        this.actualiteRepo = actualiteRepo;
+       // this.actualiteRepo = actualiteRepo;
         this.notificationRepo = notificationRepo;
         this.enfantRepo = enfantRepo;
     }
@@ -58,12 +58,12 @@ public class EventService {
         Event event = eventRepo.findById(eventId)
                 .orElseThrow(() -> new RuntimeException("Événement non trouvé"));
 
-        Actualite actualite = new Actualite();
-        actualite.setTitre(titre);
-        actualite.setContenu(contenu);
-        actualite.setDatePub(new Date());
-        actualite.setEvent(event);
-        actualiteRepo.save(actualite);
+      //  Actualite actualite = new Actualite();
+      //  actualite.setTitre(titre);
+      //  actualite.setContenu(contenu);
+      //  actualite.setDatePub(new Date());
+      //  actualite.setEvent(event);
+     //   actualiteRepo.save(actualite);
 
         List<Participation> participations = participationRepo.findByEvent(event);
         Set<Utilisateur> parentsNotifies = new HashSet<>();

@@ -23,6 +23,6 @@ public class Event {
 
     private int nbPlaces;
 
-    @OneToOne(mappedBy = "event", cascade = CascadeType.ALL)
-    private Actualite actualite;
+  //  @OneToOne(mappedBy = "event", cascade = CascadeType.ALL)
+   // private Actualite actualite;
 }

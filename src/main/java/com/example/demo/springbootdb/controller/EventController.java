@@ -28,4 +28,5 @@ public class EventController {
             @RequestParam String contenu) {
         return ResponseEntity.ok(eventService.publierActualiteParAdmin(eventId, titre, contenu));
     }
+    
 }
