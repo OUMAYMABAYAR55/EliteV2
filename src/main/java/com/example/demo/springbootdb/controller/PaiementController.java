@@ -29,9 +29,10 @@ public class PaiementController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('SECRETAIRE') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('SECRETAIRE')")
     public ResponseEntity<Paiement> create(@RequestBody Paiement paiement) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(paiementService.createPaiement(paiement));
+        Paiement created = paiementService.createPaiement(paiement);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping("/{id}")
@@ -41,7 +42,7 @@ public class PaiementController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('SECRETAIRE')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         paiementService.deletePaiement(id);
         return ResponseEntity.noContent().build();
@@ -53,6 +54,7 @@ public class PaiementController {
                                                   @RequestParam String statut) {
         return ResponseEntity.ok(paiementService.changerStatutPaiement(id, statut));
     }
+
 
     @GetMapping("/utilisateur/{id}")
     @PreAuthorize("hasRole('PARENT')")

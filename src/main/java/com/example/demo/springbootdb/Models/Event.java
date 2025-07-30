@@ -22,6 +22,8 @@ public class Event {
     private Date date;
 
     private int nbPlaces;
+    @Column(name = "image")
+    private String image;
 
     @OneToOne(mappedBy = "event", cascade = CascadeType.ALL)
     private Actualite actualite;

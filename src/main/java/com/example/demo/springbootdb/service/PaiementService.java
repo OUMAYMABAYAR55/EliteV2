@@ -14,6 +14,7 @@ public class PaiementService {
 
     @Autowired
     private PaiementRepository paiementRepository;
+    private NotificationService notificationService;
 
     public List<Paiement> getAllPaiements() {
         return paiementRepository.findAll();
@@ -29,7 +30,16 @@ public class PaiementService {
 
     public Paiement createPaiement(Paiement paiement) {
         paiement.setDatePaiement(LocalDateTime.now());
-        return paiementRepository.save(paiement);
+        paiement.setStatut("payé");
+        Paiement savedPaiement = paiementRepository.save(paiement);
+
+        // Envoyer notification après paiement
+        notificationService.envoyerNotification(
+                paiement.getUtilisateur(),
+                "Paiement de " + paiement.getMontant() + " € reçu."
+        );
+
+        return savedPaiement;
     }
 
     public Paiement updatePaiement(Long id, Paiement updatedPaiement) {
