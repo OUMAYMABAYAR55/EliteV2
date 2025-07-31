@@ -8,6 +8,6 @@ public class SecretaireController {
     @GetMapping("/dashboard")
     public String dashboard() {
         return "Bienvenue secretaire";
-    }
+    }//
 
 }
