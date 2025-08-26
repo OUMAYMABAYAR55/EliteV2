@@ -26,7 +26,7 @@ public class AuthService {
         utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
 
         if (utilisateur.getRole() == null) {
-            utilisateur.setRole(Role.MEMBRE);
+            utilisateur.setRole(Role.PARENT);
         }
 
         utilisateurRepository.save(utilisateur);

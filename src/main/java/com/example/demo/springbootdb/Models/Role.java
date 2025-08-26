@@ -4,6 +4,5 @@ public enum Role {
     ADMIN,
     PARENT,
     GERANT,
-    SECRETAIRE,
-    MEMBRE
+    SECRETAIRE
 }

@@ -24,6 +24,8 @@ public class Utilisateur {
     @Size(min = 2, max = 100, message = "Le nom doit contenir entre 2 et 100 caractères")
     @Column(name = "nom", nullable = false)
     private String nom;
+    @Column(name = "prenom", nullable = false)
+    private String prenom;
 
     @NotBlank(message = "L'email est obligatoire")
     @Email(message = "Format d'email invalide")

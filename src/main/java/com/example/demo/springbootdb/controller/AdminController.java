@@ -48,25 +48,32 @@ public class AdminController {
 
     // ✅ Upload image pour un événement
     @PostMapping("/evenement/{id}/image")
-    public ResponseEntity<?> uploadEventImage(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> uploadEventImage(@PathVariable Long id,
+                                              @RequestParam("file") MultipartFile file) {
         try {
-            Event event = evenementService.getEventById(id);
-            String filename = "event_" + id + "_" + file.getOriginalFilename();
+            Event event = evenementService.getEventById(id); // ✅ Récupération
+            if (event == null) {
+                return ResponseEntity.status(404).body("Événement non trouvé");
+            }
+
+            // ✅ Créer le dossier si inexistant
             String uploadDir = "uploads/images/";
             File dir = new File(uploadDir);
             if (!dir.exists()) dir.mkdirs();
 
+            // ✅ Sauvegarder le fichier
+            String filename = "event_" + id + "_" + file.getOriginalFilename();
             File dest = new File(uploadDir + filename);
             file.transferTo(dest);
 
+            // ✅ Mettre à jour l'image de l'événement
             event.setImage(filename);
-            evenementService.ajouterEvenement(event); // ou save/update
+            evenementService.ajouterEvenement(event);  // ⚡ update sans recréer
+
             return ResponseEntity.ok("Image uploadée avec succès");
 
         } catch (IOException e) {
             return ResponseEntity.status(500).body("Erreur lors de l'upload : " + e.getMessage());
-        } catch (RuntimeException ex) {
-            return ResponseEntity.status(404).body("Événement non trouvé");
         }
     }
 
@@ -97,7 +104,6 @@ public class AdminController {
         long totalActifs = utilisateurService.countUtilisateursActifs();
 
         Map<String, Long> stats = new HashMap<>();
-        stats.put("membres", totalMembres);
         stats.put("parents", totalParentsActifs);
         stats.put("actifs", totalActifs);
 

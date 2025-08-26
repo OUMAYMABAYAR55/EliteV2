@@ -40,6 +40,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/certification/assign/**").hasAnyAuthority("ADMIN", "GERANT", "SECRETAIRE")
                         .requestMatchers("/api/events/**").hasAnyAuthority("PARENT", "ROLE_GERANT", "SECRETAIRE")  // <-- Ajout ici
                         .requestMatchers("/api/participations/**").hasAnyAuthority("PARENT", "ADMIN")
+                        .requestMatchers("/api/email/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

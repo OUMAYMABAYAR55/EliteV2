@@ -18,6 +18,8 @@ public class Actualite {
         private String titre;
 
         private String contenu;
+        @Column(name = "image")
+        private String image;
 
         private String auteur;  // Added missing field
 
