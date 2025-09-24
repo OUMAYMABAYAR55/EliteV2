@@ -19,25 +19,25 @@ public class Utilisateur {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "formations_validees")
-    private int formationsValidees = 0;
-
-    @Column(name = "projets_realises")
-    private int projetsRealises = 0;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
-    private Role role;
-
     @NotBlank(message = "Le nom est obligatoire")
     @Size(min = 2, max = 100)
     @Column(name = "nom", nullable = false)
     private String nom;
 
+    // AJOUTE CE CHAMP MANQUANT
+    @NotBlank(message = "Le prénom est obligatoire")
+    @Size(min = 2, max = 100)
+    @Column(name = "prenom", nullable = false)
+    private String prenom;
+
     @NotBlank(message = "L'email est obligatoire")
     @Email
     @Column(name = "email", nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
+    @Size(min = 6)
+    private String password;
 
     @Size(max = 15)
     @Column(name = "telephone")
@@ -46,6 +46,16 @@ public class Utilisateur {
     @Size(max = 255)
     @Column(name = "adresse")
     private String adresse;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Role role = Role.MEMBRE; // Valeur par défaut
+
+    @Column(name = "formations_validees")
+    private int formationsValidees = 0;
+
+    @Column(name = "projets_realises")
+    private int projetsRealises = 0;
 
     @Column(name = "date_creation", nullable = false)
     private LocalDateTime dateCreation;
@@ -56,15 +66,9 @@ public class Utilisateur {
     @Column(name = "actif")
     private Boolean actif = true;
 
-    @Column(nullable = false)
-    @Size(min = 6)
-    private String password;
-
-    // Correction : mappedBy doit correspondre au champ 'parent' dans Certificat
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Certificat> certificats;
 
-    // Relations formations et projets
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Event> events;
 
@@ -74,12 +78,15 @@ public class Utilisateur {
     // Constructeurs
     public Utilisateur() {
         this.dateCreation = LocalDateTime.now();
+        this.role = Role.MEMBRE; // Rôle par défaut
     }
 
-    public Utilisateur(String nom, String email) {
+    public Utilisateur(String nom, String prenom, String email, String password) {
         this();
         this.nom = nom;
+        this.prenom = prenom;
         this.email = email;
+        this.password = password;
     }
 
     @PreUpdate
@@ -92,11 +99,9 @@ public class Utilisateur {
         return "Utilisateur{" +
                 "id=" + id +
                 ", nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
                 ", email='" + email + '\'' +
-                ", telephone='" + telephone + '\'' +
-                ", adresse='" + adresse + '\'' +
-                ", dateCreation=" + dateCreation +
-                ", actif=" + actif +
+                ", role=" + role +
                 '}';
     }
 }

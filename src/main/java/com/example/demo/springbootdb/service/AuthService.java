@@ -18,20 +18,45 @@ public class AuthService {
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public String register(Utilisateur utilisateur) {
-        if (utilisateurRepository.existsByEmail(utilisateur.getEmail())) {
-            return "Email déjà utilisé.";
+        try {
+            // Vérifier si l'email existe déjà
+            if (utilisateurRepository.existsByEmail(utilisateur.getEmail())) {
+                return "Email déjà utilisé.";
+            }
+
+            // Valider les champs obligatoires
+            if (utilisateur.getNom() == null || utilisateur.getNom().trim().isEmpty()) {
+                return "Le nom est obligatoire.";
+            }
+
+            if (utilisateur.getPrenom() == null || utilisateur.getPrenom().trim().isEmpty()) {
+                return "Le prénom est obligatoire.";
+            }
+
+            if (utilisateur.getEmail() == null || utilisateur.getEmail().trim().isEmpty()) {
+                return "L'email est obligatoire.";
+            }
+
+            if (utilisateur.getPassword() == null || utilisateur.getPassword().length() < 6) {
+                return "Le mot de passe doit contenir au moins 6 caractères.";
+            }
+
+            // Encoder le mot de passe
+            utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
+
+            // Définir un rôle par défaut si non fourni
+            if (utilisateur.getRole() == null) {
+                utilisateur.setRole(Role.MEMBRE);
+            }
+
+            // Sauvegarder l'utilisateur
+            utilisateurRepository.save(utilisateur);
+            return "Utilisateur enregistré avec succès.";
+
+        } catch (Exception e) {
+            e.printStackTrace(); // Pour le débogage
+            return "Erreur lors de l'enregistrement: " + e.getMessage();
         }
-
-        // Encoder le mot de passe
-        utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
-
-        // Définir un rôle par défaut si non fourni
-        if (utilisateur.getRole() == null) {
-            utilisateur.setRole(Role.MEMBRE); // Rôle par défaut
-        }
-
-        utilisateurRepository.save(utilisateur);
-        return "Utilisateur enregistré avec succès.";
     }
 
     public boolean login(String email, String rawPassword) {
@@ -41,7 +66,6 @@ public class AuthService {
         ).orElse(false);
     }
 
-    // ✅ Méthode manquante à ajouter ici
     public Utilisateur findByEmail(String email) {
         return utilisateurRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));

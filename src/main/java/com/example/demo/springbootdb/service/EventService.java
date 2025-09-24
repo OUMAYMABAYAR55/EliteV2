@@ -2,8 +2,8 @@ package com.example.demo.springbootdb.service;
 
 import com.example.demo.springbootdb.Models.Event;
 import com.example.demo.springbootdb.repository.EventRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +12,7 @@ public class EventService {
 
     private final EventRepository eventRepository;
 
+    @Autowired
     public EventService(EventRepository eventRepository) {
         this.eventRepository = eventRepository;
     }
@@ -34,5 +35,9 @@ public class EventService {
 
     public List<Event> findByParentId(Long parentId) {
         return eventRepository.findByParentId(parentId);
+    }
+
+    public List<Event> findByType(String type) {
+        return eventRepository.findByType(type);
     }
 }
