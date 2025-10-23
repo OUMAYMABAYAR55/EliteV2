@@ -51,31 +51,47 @@ public class AdminController {
     public ResponseEntity<?> uploadEventImage(@PathVariable Long id,
                                               @RequestParam("file") MultipartFile file) {
         try {
-            Event event = evenementService.getEventById(id); // ✅ Récupération
+            Event event = evenementService.getEventById(id);
             if (event == null) {
                 return ResponseEntity.status(404).body("Événement non trouvé");
             }
 
-            // ✅ Créer le dossier si inexistant
-            String uploadDir = "uploads/images/";
+            String uploadDir = System.getProperty("user.dir") + "/uploads/images/";
             File dir = new File(uploadDir);
-            if (!dir.exists()) dir.mkdirs();
+            if (!dir.exists() && !dir.mkdirs()) {
+                return ResponseEntity.status(500).body("Impossible de créer le dossier d'upload");
+            }
 
-            // ✅ Sauvegarder le fichier
             String filename = "event_" + id + "_" + file.getOriginalFilename();
             File dest = new File(uploadDir + filename);
             file.transferTo(dest);
 
-            // ✅ Mettre à jour l'image de l'événement
             event.setImage(filename);
-            evenementService.ajouterEvenement(event);  // ⚡ update sans recréer
+            evenementService.ajouterEvenement(event);
 
-            return ResponseEntity.ok("Image uploadée avec succès");
+            return ResponseEntity.ok(Map.of("message", "Image uploadée avec succès", "image", filename));
 
         } catch (IOException e) {
-            return ResponseEntity.status(500).body("Erreur lors de l'upload : " + e.getMessage());
+            return ResponseEntity.status(500).body("Erreur IO : " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Erreur serveur : " + e.getMessage());
         }
     }
+    @GetMapping("/evenement/image/{filename}")
+    public ResponseEntity<?> getEventImage(@PathVariable String filename) {
+        try {
+            File file = new File(System.getProperty("user.dir") + "/uploads/images/" + filename);
+            if (!file.exists()) {
+                return ResponseEntity.status(404).body("Image non trouvée");
+            }
+            return ResponseEntity.ok()
+                    .header("Content-Type", "image/png")
+                    .body(org.springframework.util.StreamUtils.copyToByteArray(new java.io.FileInputStream(file)));
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body("Erreur lecture image : " + e.getMessage());
+        }
+    }
+
 
     // ✅ Modifier un événement
     @PutMapping("/evenement/{id}")

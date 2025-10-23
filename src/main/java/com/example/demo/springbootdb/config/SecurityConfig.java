@@ -41,6 +41,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/events/**").hasAnyAuthority("PARENT", "ROLE_GERANT", "SECRETAIRE")  // <-- Ajout ici
                         .requestMatchers("/api/participations/**").hasAnyAuthority("PARENT", "ADMIN")
                         .requestMatchers("/api/email/**").permitAll()
+                        .requestMatchers("/uploads/images/**").permitAll()
+                        .requestMatchers("/api/admin/evenement/image/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
@@ -82,4 +84,6 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
+
+
 }

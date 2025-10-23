@@ -17,6 +17,7 @@ public class Notification {
     private String contenu;
 
     private Date dateEnvoi;
+    //attribut bool vu
 
     @ManyToOne
     private Utilisateur utilisateur; // le parent
